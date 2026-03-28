@@ -1,0 +1,16 @@
+﻿@model CinemaBaby.Models.Showtime
+
+<h2>⚠️ Xóa lịch chiếu</h2>
+
+<p>Bạn có chắc muốn xóa?</p>
+
+<ul>
+    <li>Phim: @Model.Movie?.Title</li>
+    <li>Giờ: @Model.ShowDate</li>
+</ul>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ShowtimeId" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<IGrouping<string, CinemaBaby.Models.Cinema>>
+
+<h2>🏢 Hệ thống rạp</h2>
+
+@foreach (var group in Model)
+{
+    <div class="mb-4">
+
+        <h3>
+            @if (group.Key == "CGV")
+            {
+                <img src="/images/cgv.png" width="40" />
+            }
+            else if (group.Key == "Lotte")
+            {
+                <img src="/images/lotte.png" width="40" />
+            }
+            else if (group.Key == "Galaxy")
+            {
+                <img src="/images/galaxy.png" width="40" />
+            }
+            else if (group.Key == "BHD")
+            {
+                <img src="/images/bhd.png" width="40" />
+            }
+            else if (group.Key == "Beta")
+            {
+                <img src="/images/beta.png" width="40" />
+            }
+
+            <span style="margin-left:10px">@group.Key</span>
+        </h3>
+
+        @foreach (var c in group)
+        {
+            <div class="card p-2 mb-2">
+                <a href="/Showtime/ByCinema/@c.CinemaId">
+                    <strong>@c.Name</strong>
+                </a>
+                <p>📍 @c.Address</p>
+            </div>
+        }
+
+    </div>
+}

@@ -1,0 +1,83 @@
+﻿@model IEnumerable<CinemaBaby.Models.Movie>
+
+@{
+    ViewData["Title"] = "Phim Sắp Chiếu";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold">⏳ PHIM SẮP KHỞI CHIẾU</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Quay lại danh sách chính</a>
+    </div>
+
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-muted fs-4">Hiện chưa có phim nào sắp chiếu. Hãy quay lại sau nhé!</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+
+                        <!-- ẢNH -->
+                        <div class="position-relative">
+                            <img src="@item.ImageUrl" class="card-img-top"
+                                 style="height: 350px; object-fit: cover;">
+                            <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">
+                                Sắp chiếu
+                            </span>
+                        </div>
+
+                        <!-- NỘI DUNG -->
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold text-truncate">@item.Title</h5>
+                            <p class="text-muted mb-1 small">🎭 @item.Genre</p>
+                            <p class="text-danger fw-bold">
+                                📅 @item.ReleaseDate.ToString("dd/MM/yyyy")
+                            </p>
+                        </div>
+
+                        <!-- NÚT -->
+                        <div class="card-footer bg-white border-0 pb-3">
+
+                            <!-- USER -->
+                            @if (item.IsPreSale)
+                            {
+                                <a asp-controller="Booking"
+                                   asp-action="SelectShowtime"
+                                   asp-route-movieId="@item.MovieId"
+                                   class="btn btn-danger w-100 mb-2">
+                                    🎟️ Đặt vé trước
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary w-100 mb-2" disabled>
+                                    Chưa mở bán vé
+                                </button>
+                            }
+
+                            <!-- ADMIN -->
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <form asp-action="TogglePreSale" method="post">
+                                    <input type="hidden" name="id" value="@item.MovieId" />
+
+                                    <button type="submit" class="btn btn-warning w-100">
+                                        @(item.IsPreSale ? "❌ Tắt bán trước" : "🔥 Mở bán trước")
+                                    </button>
+                                </form>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@model dynamic
+
+<h2>📍 Rạp gần bạn</h2>
+
+<button onclick="getLocation()" class="btn btn-primary mb-3">
+    Tìm rạp gần bạn
+</button>
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <div class="card p-3 mb-2">
+
+            <h5>@item.CinemaName</h5>
+            <p>📍 @item.Address</p>
+
+            @* 👉 tránh lỗi null *@
+            @if (item.Distance != null)
+            {
+                <p>📏 @item.Distance.ToString("0.00") km</p>
+            }
+
+        </div>
+    }
+}
+else
+{
+    <p>Không có dữ liệu</p>
+}
+
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(sendPosition);
+        } else {
+            alert("Không hỗ trợ GPS");
+        }
+    }
+
+    function sendPosition(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+
+        window.location.href = "/Showtime/Nearby?lat=" + lat + "&lng=" + lng;
+    }
+</script>

@@ -1,0 +1,35 @@
+﻿@model CinemaBaby.Models.Showtime
+
+<h2>✏️ Sửa lịch chiếu</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="ShowtimeId" />
+
+    <!-- 🎬 Phim -->
+    <div class="mb-3">
+        <label>Phim</label>
+        <select asp-for="MovieId" asp-items="ViewBag.Movies" class="form-control"></select>
+    </div>
+
+    <!-- 🏢 Rạp -->
+    <div class="mb-3">
+        <label>Rạp</label>
+        <select asp-for="CinemaId" asp-items="ViewBag.Cinemas" class="form-control"></select>
+    </div>
+
+    <!-- ⏰ Ngày giờ -->
+    <div class="mb-3">
+        <label>Ngày giờ chiếu</label>
+        <input asp-for="ShowDate" type="datetime-local" class="form-control" />
+    </div>
+
+    <!-- 💰 Giá -->
+    <div class="mb-3">
+        <label>Giá vé</label>
+        <input asp-for="Price" type="number" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+</form>

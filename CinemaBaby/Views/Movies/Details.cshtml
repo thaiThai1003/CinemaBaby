@@ -1,0 +1,20 @@
+﻿@model CinemaBaby.Models.Movie
+
+<div class="container mt-5">
+    <h2>@Model.Title</h2>
+
+    <img src="@Model.ImageUrl" width="300" />
+
+    <p><b>Thể loại:</b> @Model.Genre</p>
+    <p><b>Thời lượng:</b> @Model.Duration phút</p>
+    <p><b>Mô tả:</b> @Model.Description</p>
+
+    <a asp-action="NowShowing" class="btn btn-secondary">Quay lại</a>
+
+    <a asp-controller="Booking"
+       asp-action="SelectShowtime"
+       asp-route-movieId="@Model.MovieId"
+       class="btn btn-danger mt-2">
+        🎟️ Đặt vé
+    </a>
+</div>

@@ -1,0 +1,42 @@
+﻿@model CinemaBaby.Models.Showtime
+
+<h2>➕ Thêm lịch chiếu</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <!-- 🎬 Phim -->
+    <div class="mb-3">
+        <label>Phim</label>
+        <select asp-for="MovieId" asp-items="ViewBag.Movies" class="form-control" required>
+            <option value="">-- Chọn phim --</option>
+        </select>
+    </div>
+
+    <!-- 🏢 Rạp -->
+    <div class="mb-3">
+        <label>Rạp</label>
+        <select asp-for="CinemaId" asp-items="ViewBag.Cinemas" class="form-control" required>
+            <option value="">-- Chọn rạp --</option>
+        </select>
+    </div>
+
+    <!-- ⏰ Ngày giờ -->
+    <div class="mb-3">
+        <label>Ngày giờ chiếu</label>
+        <input asp-for="ShowDate" type="datetime-local" class="form-control" required />
+    </div>
+
+    <!-- 💰 Giá -->
+    <div class="mb-3">
+        <label>Giá vé</label>
+        <input asp-for="Price" type="number" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">💾 Lưu</button>
+</form>
+
+<!-- 🔥 HIỂN THỊ LỖI -->
+<div class="text-danger mt-2">
+    @Html.ValidationSummary()
+</div>

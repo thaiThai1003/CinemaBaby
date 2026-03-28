@@ -1,0 +1,31 @@
+﻿@model List<CinemaBaby.Models.Customer>
+
+<h2>👤 Quản lý tài khoản</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Email</th>
+            <th>SĐT</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.FullName</td>
+                <td>@u.Email</td>
+                <td>@u.PhoneNumber</td>
+                <td>
+                    <a asp-action="Delete"
+                       asp-route-id="@u.CustomerId"
+                       class="btn btn-danger btn-sm">
+                        Xóa
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,53 @@
+﻿@model List<CinemaBaby.Models.Promotion>
+
+<h2>🎁 Khuyến mãi</h2>
+
+@if (User.IsInRole("Admin"))
+{
+    <a asp-action="Create" class="btn btn-success mb-3">➕ Thêm khuyến mãi</a>
+}
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+
+                <img src="@item.ImageUrl" class="card-img-top" style="height:200px; object-fit:cover;" />
+
+                <div class="card-body">
+                    <h5>@item.Title</h5>
+                    <p>@item.Description</p>
+
+                    <p>
+                        ⏰ @item.StartDate.ToShortDateString() -
+                        @item.EndDate.ToShortDateString()
+                    </p>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="d-flex gap-2 mt-2">
+
+                            <!-- ✏️ NÚT SỬA -->
+                            <a asp-action="Edit"
+                               asp-route-id="@item.PromotionId"
+                               class="btn btn-warning btn-sm">
+                                ✏️ Sửa
+                            </a>
+
+                            <!-- 🗑 NÚT XÓA -->
+                            <form asp-action="Delete"
+                                  asp-route-id="@item.PromotionId"
+                                  method="post"
+                                  onsubmit="return confirm('Xóa khuyến mãi này?');">
+                                <button class="btn btn-danger btn-sm">🗑 Xóa</button>
+                            </form>
+
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    }
+</div>

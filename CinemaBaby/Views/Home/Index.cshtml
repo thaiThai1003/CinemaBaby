@@ -1,0 +1,168 @@
+﻿@model List<CinemaBaby.Models.Movie>
+
+@{
+    ViewData["Title"] = "Home Page";
+
+    var nowShowing = Model.Where(m => m.ReleaseDate <= DateTime.Now);
+    var comingSoon = Model.Where(m => m.ReleaseDate > DateTime.Now);
+}
+
+<!-- 🔥 BANNER -->
+<div class="container-fluid p-0">
+    <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+
+        <div class="carousel-inner">
+
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+                <div class="banner-slide"
+                     style="background:url('/images/banner/banner1.png') center/cover no-repeat;">
+                    <div class="overlay text-center text-white">
+                        <h1 class="fw-bold">🎬 CinemaBaby</h1>
+                        <p>Đặt vé nhanh - Xem phim cực đã</p>
+                        <a href="/Movies" class="btn btn-danger">Đặt vé ngay</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+                <div class="banner-slide"
+                     style="background:url('/images/banner/banner.png') center/cover no-repeat;">
+                    <div class="overlay text-center text-white">
+                        <h1>🔥 Phim hot đang chiếu</h1>
+                        <p>Trải nghiệm rạp chiếu hiện đại</p>
+                        <a href="/Movies" class="btn btn-danger">Đặt vé ngay</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 🎬 PHIM ĐANG CHIẾU -->
+<h2 class="mt-5 text-center text-danger">🎬 Phim đang chiếu</h2>
+
+<div class="row">
+    @foreach (var movie in nowShowing)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card bg-dark text-white shadow">
+
+                <!-- ẢNH + PLAY -->
+                <div class="movie-card">
+                    <img src="@movie.ImageUrl" class="movie-img" />
+
+                    <div class="play-btn">
+                        ▶
+                    </div>
+                </div>
+
+                <div class="card-body text-center">
+                    <h5>@movie.Title</h5>
+
+                    <a href="/Booking/SelectShowtime?movieId=@movie.MovieId"
+                       class="btn btn-danger w-100">
+                        🎟️ Đặt vé
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<h2>🎬 Phim đang chiếu</h2>
+
+
+<div class="search-box">
+    <form method="get" asp-action="Index">
+        <input type="text" name="searchString"
+               placeholder="🔍 Tìm phim..."
+               value="@ViewBag.CurrentFilter" />
+
+        <button type="submit">Tìm</button>
+    </form>
+</div>
+
+<!-- 🎬 PHIM SẮP CHIẾU -->
+<h2 class="mt-5 text-center text-warning">🎬 Phim sắp chiếu</h2>
+
+<div class="row">
+    @foreach (var movie in comingSoon)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card bg-dark text-white shadow">
+
+                <div class="movie-card">
+                    <img src="@Url.Content("~/images/" + movie.ImageUrl)"
+                         alt="@movie.Title"
+                         style="width:100%; height:300px; object-fit:cover;" />
+
+                    <div class="play-btn">
+                        ▶
+                    </div>
+                </div>
+
+                <div class="card-body text-center">
+                    <h5>@movie.Title</h5>
+                    <span class="text-muted">
+                        Khởi chiếu: @movie.ReleaseDate.ToShortDateString()
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- 🕒 LỊCH CHIẾU -->
+<h2 class="mt-5 text-center">🕒 Lịch chiếu</h2>
+
+<table class="table table-bordered table-hover">
+    <tr class="table-dark">
+        <th>Phim</th>
+        <th>Ngày</th>
+        <th>Giờ</th>
+        <th></th>
+    </tr>
+
+    @foreach (var show in Model.SelectMany(m => m.Showtimes))
+    {
+        <tr>
+            <td>@show.Movie.Title</td>
+            <td>@show.ShowDate.ToShortDateString()</td>
+            <td>@show.ShowDate.ToShortTimeString()</td>
+            <td>
+                <a href="/Booking/SelectSeats?showtimeId=@show.ShowtimeId"
+                   class="btn btn-success">
+                    Đặt vé
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+
+<!-- 💬 BÌNH LUẬN -->
+<h2 class="mt-5 text-center text-danger">💬 Bình luận nổi bật</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card bg-dark text-white p-3 shadow">
+            <h5>🔥 Phim quá hay</h5>
+            <p>Xem cực đã, đáng tiền!</p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-dark text-white p-3 shadow">
+            <h5>🎬 Nội dung hấp dẫn</h5>
+            <p>Kỹ xảo đẹp, âm thanh tốt</p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-dark text-white p-3 shadow">
+            <h5>👍 Đáng xem</h5>
+            <p>Sẽ đi xem lại lần nữa</p>
+        </div>
+    </div>
+</div>

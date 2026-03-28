@@ -1,0 +1,56 @@
+﻿@model List<CinemaBaby.Models.Seat>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+<h2>🎟️ Chọn ghế</h2>
+
+<form asp-action="BookMultipleSeats" method="post">
+    <input type="hidden" name="selectedSeats" id="selectedSeats" />
+
+    <div style="width:300px;">
+        @foreach (var seat in Model)
+        {
+            <button type="button"
+                    class="seat btn m-1 @(seat.IsBooked == true ? "btn-secondary" : "btn-outline-success")"
+                    data-id="@seat.SeatId"
+                    @(seat.IsBooked == true ? "disabled" : "")>
+                @seat.SeatNumber
+            </button>
+        }
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-danger">
+        ✅ Xác nhận đặt vé
+    </button>
+</form>
+
+<script>
+    let selected = [];
+
+    document.querySelectorAll(".seat").forEach(btn => {
+        btn.addEventListener("click", function () {
+            let id = this.getAttribute("data-id");
+
+            if (selected.includes(id)) {
+                // ❌ bỏ chọn
+                selected = selected.filter(x => x !== id);
+                this.classList.remove("btn-success");
+                this.classList.add("btn-outline-success");
+            } else {
+                // ✅ chọn
+                selected.push(id);
+                this.classList.remove("btn-outline-success");
+                this.classList.add("btn-success");
+            }
+
+            document.getElementById("selectedSeats").value = selected.join(",");
+        });
+    });
+</script>

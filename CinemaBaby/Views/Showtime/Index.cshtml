@@ -1,0 +1,68 @@
+﻿@model List<CinemaBaby.Models.Showtime>
+
+<h2 class="mb-3">🎬 Lịch chiếu</h2>
+
+<!-- 🔥 CHỈ ADMIN -->
+@if (User.IsInRole("Admin"))
+{
+    <a asp-action="Create" class="btn btn-success mb-3">➕ Thêm lịch chiếu</a>
+}
+
+<table class="table table-bordered table-hover text-center align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Phim</th>
+            <th>Rạp</th> <!-- 🔥 THÊM -->
+            <th>Ngày giờ</th>
+            <th>Giá</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <!-- 🎬 Tên phim -->
+                <td>@s.Movie?.Title</td>
+
+                <!-- 🏢 Rạp -->
+                <td>@(s.Cinema?.Name ?? "Chưa có")</td>
+
+                <!-- ⏰ Ngày giờ -->
+                <td>@s.ShowDate.ToString("dd/MM/yyyy HH:mm")</td>
+
+                <!-- 💰 Giá -->
+                <td class="text-danger fw-bold">
+                    @s.Price.ToString("N0") VNĐ
+                </td>
+
+                <!-- 🎯 Hành động -->
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit"
+                           asp-route-id="@s.ShowtimeId"
+                           class="btn btn-warning btn-sm me-1">
+                            ✏️
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@s.ShowtimeId"
+                           class="btn btn-danger btn-sm">
+                            🗑
+                        </a>
+                    }
+                    else
+                    {
+                        <!-- 🔥 USER đặt vé -->
+                        <a href="/Booking/SelectSeat?showtimeId=@s.ShowtimeId"
+                           class="btn btn-primary btn-sm">
+                            🎟️ Đặt vé
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

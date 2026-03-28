@@ -1,0 +1,85 @@
+﻿@model IEnumerable<CinemaBaby.Models.Movie>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">🎬 DANH SÁCH PHIM</h1>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="text-center mb-3">
+            <a asp-action="Create" class="btn btn-primary">➕ Thêm phim</a>
+        </div>
+    }
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow">
+
+                    <img src="@item.ImageUrl"
+                         class="card-img-top"
+                         style="height:350px; object-fit:cover;" />
+
+                    <div class="card-body">
+                        <h5>@item.Title</h5>
+                        <p>@item.Genre</p>
+                        <p><b>@item.Duration phút</b></p>
+
+                        <!-- USER -->
+                        <a asp-controller="Booking"
+                           asp-action="SelectShowtime"
+                           asp-route-movieId="@item.MovieId"
+                           class="btn btn-primary mb-2">
+                            🎟️ Đặt vé
+                        </a>
+
+                        <!-- ADMIN -->
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="mt-2">
+
+                                <!-- SỬA -->
+                                <a asp-controller="Showtime"
+                                   asp-action="Index"
+                                   class="btn btn-warning btn-sm">
+                                    Sửa
+                                </a>
+
+                                <!-- XEM -->
+                                <a asp-action="Details"
+                                   asp-route-id="@item.MovieId"
+                                   class="btn btn-info btn-sm">
+                                    Xem
+                                </a>
+
+                                <!-- 🔥 BẬT/TẮT BÁN VÉ -->
+                                <form asp-action="TogglePreSale" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@item.MovieId" />
+
+                                    <button type="submit"
+                                            class="btn btn-sm @(item.IsPreSale ? "btn-secondary" : "btn-success")">
+                                        @(item.IsPreSale ? "❌ Tắt bán vé" : "🔥 Mở bán vé")
+                                    </button>
+                                </form>
+
+                                <!-- XÓA -->
+                                <form asp-action="Delete"
+                                      asp-route-id="@item.MovieId"
+                                      method="post"
+                                      style="display:inline;"
+                                      onsubmit="return confirm('Xóa phim này?');">
+
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        Xóa
+                                    </button>
+                                </form>
+
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>z

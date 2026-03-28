@@ -1,0 +1,12 @@
+﻿@model List<CinemaBaby.Models.Showtime>
+
+<h2>🎬 Phim đang chiếu tại rạp</h2>
+
+@foreach (var s in Model)
+{
+    <div class="card p-3 mb-2">
+        <h5>@s.Movie.Title</h5>
+        <p>🕒 @s.ShowDate</p>
+        <p>💰 @s.Price.ToString("N0") VNĐ</p>
+    </div>
+}

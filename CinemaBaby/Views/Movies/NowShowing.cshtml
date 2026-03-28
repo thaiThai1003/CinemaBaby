@@ -1,0 +1,43 @@
+﻿@model List<CinemaBaby.Models.Movie>
+
+<h2 class="mb-4">🎬 Phim đang chiếu</h2>
+
+<div class="row">
+    @foreach (var movie in Model)
+    {
+        <div class="col-md-3">
+            <div class="card mb-4 shadow-sm">
+
+                <!-- Poster -->
+                <img src="@(string.IsNullOrEmpty(movie.ImageUrl)
+                                                 ? "https://via.placeholder.com/300x400"
+                                                 : Url.Content("~/images/" + movie.ImageUrl))"
+                 class="card-img-top"
+                 style="height:300px; object-fit:cover;" />
+
+                <div class="card-body text-center">
+                    <h5 class="fw-bold">@movie.Title</h5>
+                    <p class="text-muted mb-2">@movie.Genre</p>
+
+                    <!-- Nút -->
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Movies"
+                           asp-action="Details"
+                           asp-route-id="@movie.MovieId"
+                           class="btn btn-primary btn-sm">
+                            🔍 Xem chi tiết
+                        </a>
+
+                        <a asp-controller="Booking"
+                           asp-action="SelectShowtime"
+                           asp-route-movieId="@movie.MovieId"
+                           class="btn btn-danger btn-sm">
+                            🎟️ Đặt vé
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        }
+</div>

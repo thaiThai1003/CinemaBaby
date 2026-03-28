@@ -1,0 +1,28 @@
+﻿@model List<CinemaBaby.Models.Showtime>
+
+<h2>🎬 Chọn rạp & suất chiếu</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Rạp</th>
+            <th>Giờ chiếu</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var show in Model)
+        {
+            <tr>
+                <td>@show.Cinema?.Name</td>
+                <td>@show.ShowDate.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <a href="/Booking/SelectSeat?showTimeId=@show.ShowtimeId"
+                       class="btn btn-primary">
+                        Chọn ghế
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

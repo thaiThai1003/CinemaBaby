@@ -1,0 +1,13 @@
+﻿@model CinemaBaby.Models.Customer
+
+<h2>⚠️ Xóa tài khoản</h2>
+
+<p>Bạn có chắc muốn xóa không?</p>
+
+<p><b>@Model.FullName</b></p>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="CustomerId" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

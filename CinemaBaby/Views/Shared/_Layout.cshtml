@@ -1,0 +1,173 @@
+﻿@using Microsoft.AspNetCore.Http
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CinemaBaby</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CinemaBaby.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.png" alt="CinemaBaby" style="height:40px; margin-right:10px;" />
+                    <span>CinemaBaby</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        <!-- MENU CHÍNH -->
+                        <li class="nav-item">
+                            <a class="nav-link text-danger fw-bold" asp-controller="Booking" asp-action="Index">
+                                Đặt vé phim chiếu rạp
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Showtime" asp-action="Index">
+                                Lịch chiếu
+                            </a>
+                        </li>
+
+                        <!-- Phim -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                Phim
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Movies" asp-action="NowShowing">Phim đang chiếu</a></li>
+                                <li><a class="dropdown-item" asp-controller="Movies" asp-action="Upcoming">Phim sắp chiếu</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Rạp -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                Rạp
+                            </a>
+                            <ul class="dropdown-menu">
+                                <a class="dropdown-item" href="/Showtime/Nearby">Rạp gần bạn</a>
+                                <a class="dropdown-item" href="/Showtime/CinemaList">Hệ thống rạp</a>
+                            </ul>
+                        </li>
+
+                        <!-- Tin tức -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                Tin tức
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Promotion"
+                                       asp-action="Index">
+                                        Khuyến mãi
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Movies"
+                                       asp-action="Trailer">
+                                        Review phim
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link">Cộng đồng</a>
+                        </li>
+
+                        <!-- ADMIN MENU -->
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-danger fw-bold" href="#" data-bs-toggle="dropdown">
+                                    ⚙️ Quản lý
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Movies" asp-action="Index">Quản lý phim</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Showtime" asp-action="Index">Quản lý lịch chiếu</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Index">Quản lý tài khoản</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        <!-- USER -->
+                        <li class="nav-item dropdown ms-auto">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a class="nav-link dropdown-toggle text-primary fw-bold" href="#" data-bs-toggle="dropdown">
+                                    👤 @User.Identity.Name
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <span class="badge bg-danger ms-1">Admin</span>
+                                    }
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                            Trang cá nhân
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-controller="Account"
+                                           asp-action="ChangePassword">
+                                            Đổi mật khẩu
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider"></li>
+
+                                    <li>
+                                        <a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">
+                                            Đăng xuất
+                                        </a>
+                                    </li>
+                                </ul>
+                            }
+                            else
+                            {
+                                <a class="nav-link fw-bold" asp-controller="Account" asp-action="Login">
+                                    👤 Tài khoản
+                                </a>
+                            }
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - CinemaBaby
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+</body>
+</html>
