@@ -12,11 +12,14 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/logo.png" alt="CinemaBaby" style="height:40px; margin-right:10px;" />
-                    <span>CinemaBaby</span>
+
+                <!-- LOGO -->
+                <a class="navbar-brand d-flex align-items-center fw-bold text-danger"
+                   asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.png" style="height:40px; margin-right:10px;" />
+                    CinemaBaby
                 </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
@@ -26,10 +29,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
 
-                        <!-- MENU CHÍNH -->
+                        <!-- 🔥 FIX: ĐẶT VÉ → PHIM ĐANG CHIẾU -->
                         <li class="nav-item">
-                            <a class="nav-link text-danger fw-bold" asp-controller="Booking" asp-action="Index">
-                                Đặt vé phim chiếu rạp
+                            <a class="nav-link text-warning fw-bold" asp-controller="Movies" asp-action="NowShowing">
+                                🎬 Đặt vé
                             </a>
                         </li>
 
@@ -39,7 +42,7 @@
                             </a>
                         </li>
 
-                        <!-- Phim -->
+                        <!-- PHIM -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 Phim
@@ -50,35 +53,30 @@
                             </ul>
                         </li>
 
-                        <!-- Rạp -->
+                        <!-- RẠP -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 Rạp
                             </a>
                             <ul class="dropdown-menu">
-                                <a class="dropdown-item" href="/Showtime/Nearby">Rạp gần bạn</a>
-                                <a class="dropdown-item" href="/Showtime/CinemaList">Hệ thống rạp</a>
+                                <li><a class="dropdown-item" href="/Showtime/Nearby">Rạp gần bạn</a></li>
+                                <li><a class="dropdown-item" href="/Showtime/CinemaList">Hệ thống rạp</a></li>
                             </ul>
                         </li>
 
-                        <!-- Tin tức -->
+                        <!-- TIN TỨC -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 Tin tức
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item"
-                                       asp-controller="Promotion"
-                                       asp-action="Index">
+                                    <a class="dropdown-item" asp-controller="Promotion" asp-action="Index">
                                         Khuyến mãi
                                     </a>
                                 </li>
-
                                 <li>
-                                    <a class="dropdown-item"
-                                       asp-controller="Movies"
-                                       asp-action="Trailer">
+                                    <a class="dropdown-item" asp-controller="Movies" asp-action="Trailer">
                                         Review phim
                                     </a>
                                 </li>
@@ -89,7 +87,7 @@
                             <a class="nav-link">Cộng đồng</a>
                         </li>
 
-                        <!-- ADMIN MENU -->
+                        <!-- ADMIN -->
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
@@ -108,36 +106,15 @@
                         <li class="nav-item dropdown ms-auto">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <a class="nav-link dropdown-toggle text-primary fw-bold" href="#" data-bs-toggle="dropdown">
+                                <a class="nav-link dropdown-toggle text-info fw-bold" href="#" data-bs-toggle="dropdown">
                                     👤 @User.Identity.Name
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <span class="badge bg-danger ms-1">Admin</span>
-                                    }
                                 </a>
 
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
-                                            Trang cá nhân
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a class="dropdown-item"
-                                           asp-controller="Account"
-                                           asp-action="ChangePassword">
-                                            Đổi mật khẩu
-                                        </a>
-                                    </li>
-
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile">Trang cá nhân</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="ChangePassword">Đổi mật khẩu</a></li>
                                     <li><hr class="dropdown-divider"></li>
-
-                                    <li>
-                                        <a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">
-                                            Đăng xuất
-                                        </a>
-                                    </li>
+                                    <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">Đăng xuất</a></li>
                                 </ul>
                             }
                             else
@@ -160,9 +137,9 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted text-center">
         <div class="container">
-            &copy; 2026 - CinemaBaby
+            🎬 CinemaBaby © 2026
         </div>
     </footer>
 

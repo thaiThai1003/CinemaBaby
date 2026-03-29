@@ -9,7 +9,9 @@
 
 <h2>🎟️ Chọn ghế</h2>
 
-<form asp-action="BookMultipleSeats" method="post">
+<form asp-action="BookMultipleSeats" asp-controller="Booking" method="post">
+
+    <!-- chứa danh sách SeatId -->
     <input type="hidden" name="selectedSeats" id="selectedSeats" />
 
     <div style="width:300px;">
@@ -36,6 +38,7 @@
 
     document.querySelectorAll(".seat").forEach(btn => {
         btn.addEventListener("click", function () {
+
             let id = this.getAttribute("data-id");
 
             if (selected.includes(id)) {
@@ -50,6 +53,7 @@
                 this.classList.add("btn-success");
             }
 
+            // gán vào input hidden
             document.getElementById("selectedSeats").value = selected.join(",");
         });
     });

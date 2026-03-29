@@ -17,12 +17,12 @@ namespace CinemaBaby.Controllers
         // 🔹 Chọn suất chiếu
         public IActionResult SelectShowtime(int movieId)
         {
-            
-
             var showtimes = _context.Showtimes
-                .Include(s => s.Cinema) 
+                .Include(s => s.Cinema)
                 .Where(s => s.MovieId == movieId)
                 .ToList();
+
+            if (!showtimes.Any())
             {
                 TempData["Message"] = "Phim này chưa có suất chiếu!";
             }
@@ -71,33 +71,7 @@ namespace CinemaBaby.Controllers
             return View(seats);
         }
 
-        // 🔹 Đặt 1 ghế
-        [HttpPost]
-        public IActionResult BookSeat(int seatId)
-        {
-            var seat = _context.Seats.FirstOrDefault(s => s.SeatId == seatId);
-
-            // ❗ FIX lỗi null + tránh crash
-            if (seat == null)
-            {
-                TempData["Message"] = "Không tìm thấy ghế!";
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (seat.IsBooked == true)
-            {
-                TempData["Message"] = "Ghế đã được đặt!";
-                return RedirectToAction("SelectSeat", new { showtimeId = seat.ShowtimeId });
-            }
-
-            seat.IsBooked = true;
-            _context.SaveChanges();
-
-            TempData["Message"] = "Đặt vé thành công 🎉";
-            return RedirectToAction("SelectSeat", new { showtimeId = seat.ShowtimeId });
-        }
-
-        // 🔹 Đặt nhiều ghế
+        // 🔹 Đặt nhiều ghế + chuyển thanh toán
         [HttpPost]
         public IActionResult BookMultipleSeats(string selectedSeats)
         {
@@ -121,6 +95,7 @@ namespace CinemaBaby.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            // ✅ đánh dấu ghế đã đặt
             foreach (var seat in seats)
             {
                 if (seat.IsBooked != true)
@@ -129,13 +104,34 @@ namespace CinemaBaby.Controllers
                 }
             }
 
+            // ✅ tính tiền
+            decimal pricePerSeat = 50000;
+            decimal total = seats.Count * pricePerSeat;
+
+            // ✅ lưu booking
+            var booking = new Booking
+            {
+                Seats = string.Join(",", seats.Select(s => s.SeatNumber)),
+                TotalPrice = total,
+                Status = "Pending"
+            };
+
+            _context.Bookings.Add(booking);
             _context.SaveChanges();
 
-            TempData["Message"] = "Đặt nhiều ghế thành công 🎉";
+            // 🚀 chuyển sang thanh toán
+            return RedirectToAction("Payment", new { id = booking.BookingId });
+        }
 
-            int showtimeId = seats.First().ShowtimeId ?? 0;
+        // 🔹 Trang thanh toán
+        public IActionResult Payment(int id)
+        {
+            var booking = _context.Bookings.Find(id);
 
-            return RedirectToAction("SelectSeat", new { showtimeId });
+            if (booking == null)
+                return RedirectToAction("Index", "Home");
+
+            return View(booking);
         }
     }
 }

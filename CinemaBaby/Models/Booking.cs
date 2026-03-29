@@ -1,19 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace CinemaBaby.Models;
-
-public partial class Booking
+namespace CinemaBaby.Models
 {
-    public int BookingId { get; set; }
+    public class Booking
+    {
+        public int BookingId { get; set; }
 
-    public int? CustomerId { get; set; }
+        // 🔥 lưu danh sách ghế (A1,A2,B3...)
+        public string Seats { get; set; }
 
-    public int? SeatId { get; set; }
+        // 🔥 tổng tiền
+        public decimal TotalPrice { get; set; }
 
-    public DateTime? BookingDate { get; set; }
+        // 🔥 trạng thái thanh toán
+        public string Status { get; set; } = "Pending";
 
-    public virtual Customer? Customer { get; set; }
-
-    public virtual Seat? Seat { get; set; }
+        // 🔥 ngày đặt
+        public DateTime BookingDate { get; set; } = DateTime.Now;
+    }
 }

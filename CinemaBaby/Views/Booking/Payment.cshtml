@@ -1,0 +1,12 @@
+﻿@model CinemaBaby.Models.Booking
+
+<h2>Thanh toán</h2>
+
+<p><b>Ghế:</b> @Model.Seats</p>
+<p><b>Tổng tiền:</b> @Model.TotalPrice VND</p>
+
+<hr />
+
+<h4>Quét QR để thanh toán</h4>
+
+<img src="/QR/GenerateQR?amount=@Model.TotalPrice" style="width:250px;" />
