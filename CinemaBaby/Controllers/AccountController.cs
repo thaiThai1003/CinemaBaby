@@ -26,6 +26,10 @@ namespace CinemaBaby.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
+            // 🔥 FIX: tránh null + trim
+            username = username?.Trim();
+            password = password?.Trim();
+
             // 🔴 ADMIN
             var admin = _context.Admins
                 .FirstOrDefault(a => a.Username == username && a.Password == password);
@@ -34,17 +38,14 @@ namespace CinemaBaby.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, admin.Username), // 🔥 SỬA Ở ĐÂY
+                    new Claim(ClaimTypes.Name, admin.Username),
                     new Claim(ClaimTypes.Role, "Admin")
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    principal
-                );
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                 return RedirectToAction("Index", "Movies");
             }
@@ -57,22 +58,20 @@ namespace CinemaBaby.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, customer.Username), // 🔥 SỬA Ở ĐÂY
+                    new Claim(ClaimTypes.Name, customer.Username),
                     new Claim(ClaimTypes.Role, "Customer")
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    principal
-                );
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Error = "Sai tài khoản hoặc mật khẩu rồi bạn ơi!";
+            // ❌ FAIL
+            ViewBag.Error = "Sai tài khoản hoặc mật khẩu!";
             return View();
         }
 
@@ -135,8 +134,7 @@ namespace CinemaBaby.Controllers
             return RedirectToAction("Index");
         }
 
-        // ================= 🔐 ĐỔI MẬT KHẨU =================
-
+        // ================= CHANGE PASSWORD =================
         [Authorize]
         public IActionResult ChangePassword()
         {
@@ -147,7 +145,7 @@ namespace CinemaBaby.Controllers
         [Authorize]
         public IActionResult ChangePassword(string oldPassword, string newPassword)
         {
-            var username = User.Identity.Name;
+            var username = User.Identity?.Name;
 
             if (string.IsNullOrEmpty(username))
             {
